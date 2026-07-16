@@ -5,23 +5,21 @@ trigger:
 
 pool: default
 # #  vmImage: ubuntu-latest
-# variables:
-#   nodeVersion: '20.x'
-steps:
-  - script: echo "Hello world"
+variables:
+  nodeVersion: '20.x'
+# steps:
+#   - script: echo "Hello world"
 
-
- 
-# stages:
-#   - stage: Build
-#     displayName: Build stage
-#     jobs:
-#       - job: build_job
-#         displayName:  Build Job
-#         steps:
-#         - task: NodeAndNpmTool@1
-#           inputs:
-#             versionSpec: '$(nodeVersion)'
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: build_job
+        displayName:  Build Job
+        steps:
+        - task: NodeAndNpmTool@1
+          inputs:
+            versionSpec: '$(nodeVersion)'
 #         - task: Npm@1
 #           inputs:
 #             command: 'custom'
