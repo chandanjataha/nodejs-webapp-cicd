@@ -1,86 +1,87 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+
 
 trigger:
 - main
 
 pool: default
-#  vmImage: ubuntu-latest
-variables:
-  nodeVersion: '20.x'
+# #  vmImage: ubuntu-latest
+# variables:
+#   nodeVersion: '20.x'
+steps:
+  - script: echo "Hello world"
 
-stages:
-  - stage: Build
-    displayName: Build stage
-    jobs:
-      - job: build_job
-        displayName:  Build Job
-        steps:
-        - task: NodeAndNpmTool@1
-          inputs:
-            versionSpec: '$(nodeVersion)'
-        - task: Npm@1
-          inputs:
-            command: 'custom'
-            customCommand: 'npm run build'
-            customRegistry: 'useFeed'
-            customFeed: '3799d04e-9956-41aa-946d-8e8fcbe432f8'
 
-        - task: ArchiveFiles@2
-          inputs:
-            rootFolderOrFile: '$(Build.BinariesDirectory)'
-            includeRootFolder: true
-            archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-            replaceExistingArchive: true 
+ 
+# stages:
+#   - stage: Build
+#     displayName: Build stage
+#     jobs:
+#       - job: build_job
+#         displayName:  Build Job
+#         steps:
+#         - task: NodeAndNpmTool@1
+#           inputs:
+#             versionSpec: '$(nodeVersion)'
+#         - task: Npm@1
+#           inputs:
+#             command: 'custom'
+#             customCommand: 'npm run build'
+#             customRegistry: 'useFeed'
+#             customFeed: '3799d04e-9956-41aa-946d-8e8fcbe432f8'
 
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+#         - task: ArchiveFiles@2
+#           inputs:
+#             rootFolderOrFile: '$(Build.BinariesDirectory)'
+#             includeRootFolder: true
+#             archiveType: 'zip'
+#             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+#             replaceExistingArchive: true 
 
-# stage 2: Test
-  - stage: Test
-    dependsOn: Build
-    displayName: Test stage
-    jobs:
-        - job: Test-job
-          displayName: Test Job
-          pool: default
-          steps:
-          - task: NodeAndNpmTool@1
-            inputs:
-               versionSpec: '20.x'
+#         - task: PublishBuildArtifacts@1
+#           inputs:
+#             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#             ArtifactName: 'drop'
+#             publishLocation: 'Container'
 
-          - task: Npm@1
-            inputs:
-              command: 'install'
-          - task: Npm@1
-            inputs:
-              command: 'custom'
-              customCommand: 'npm test'
+# # stage 2: Test
+#   - stage: Test
+#     dependsOn: Build
+#     displayName: Test stage
+#     jobs:
+#         - job: Test-job
+#           displayName: Test Job
+#           pool: default
+#           steps:
+#           - task: NodeAndNpmTool@1
+#             inputs:
+#                versionSpec: '20.x'
 
-# stage 3 deploy
-  - stage: Deploy
-    displayName: Deploy
-    dependsOn: Test
-    condition: succeeded()
-    jobs:
-      - deployment: DeployWebApp
-        displayName: Deploy Azure app services
-        environment: production
-        pool: default
-        strategy:
-         runOnce:
-           deploy:
-             steps:
-             - task: DownloadBuildArtifacts@1
-               inputs:
-                 buildType: 'current'
-                 downloadType: 'specific'
-                 downloadPath: '$(System.ArtifactsDirectory)'
+#           - task: Npm@1
+#             inputs:
+#               command: 'install'
+#           - task: Npm@1
+#             inputs:
+#               command: 'custom'
+#               customCommand: 'npm test'
+
+# # stage 3 deploy
+#   - stage: Deploy
+#     displayName: Deploy
+#     dependsOn: Test
+#     condition: succeeded()
+#     jobs:
+#       - deployment: DeployWebApp
+#         displayName: Deploy Azure app services
+#         environment: production
+#         pool: default
+#         strategy:
+#          runOnce:
+#            deploy:
+#              steps:
+#              - task: DownloadBuildArtifacts@1
+#                inputs:
+#                  buildType: 'current'
+#                  downloadType: 'specific'
+#                  downloadPath: '$(System.ArtifactsDirectory)'
 
              
