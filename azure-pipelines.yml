@@ -20,12 +20,12 @@ stages:
         - task: NodeAndNpmTool@1
           inputs:
             versionSpec: '$(nodeVersion)'
-#         - task: Npm@1
-#           inputs:
-#             command: 'custom'
-#             customCommand: 'npm run build'
-#             customRegistry: 'useFeed'
-#             customFeed: '3799d04e-9956-41aa-946d-8e8fcbe432f8'
+        - task: Npm@1
+          inputs:
+            command: 'custom'
+            customCommand: 'npm run build'
+            customRegistry: 'useFeed'
+            customFeed: '3799d04e-9956-41aa-946d-8e8fcbe432f8'
 
 #         - task: ArchiveFiles@2
 #           inputs:
